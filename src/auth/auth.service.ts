@@ -3,6 +3,7 @@ import { User } from '../entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityRepository, EntityManager } from '@mikro-orm/postgresql';
+import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
@@ -18,9 +19,11 @@ export class AuthService {
     return user;
   }
 
-  async signin(email: string, pass: string): Promise<User | null> {
+  async signin(loginDto: LoginDto): Promise<User | null> {
+    const email = loginDto.email;
+    const password = loginDto.password;
     const user = await this.userRepository.findOne({ email });
-    if (user && user.password === pass) {
+    if (user && user.password === password) {
       return user;
     }
     return null;

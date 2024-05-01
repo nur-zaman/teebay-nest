@@ -24,10 +24,9 @@ export class ProductService {
     private readonly purchaseRepository: EntityRepository<Purchase>,
   ) {}
 
-  async create(createProductDto: CreateProductDto, userId: string) {
+  async create(createProductDto: CreateProductDto) {
     const product = this.productRepository.create({
       ...createProductDto,
-      userId,
       categories: [], // Initialize categories as an empty array
     });
 
