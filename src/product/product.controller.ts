@@ -58,12 +58,20 @@ export class ProductController {
   @ApiOkResponse({ description: 'Buy a product' })
   @Post('buy')
   async buyProduct(@Body() buyProductDto: BuyProductDto) {
-    return this.productService.buyProduct(buyProductDto);
+    return this.productService.buy(
+      buyProductDto.userId,
+      buyProductDto.productId,
+    );
   }
 
   @ApiOkResponse({ description: 'Rent a product' })
   @Post('rent')
   async rentProduct(@Body() rentProductDto: RentProductDto) {
-    return this.productService.rentProduct(rentProductDto);
+    return this.productService.rent(
+      rentProductDto.userId,
+      rentProductDto.productId,
+      rentProductDto.startDate,
+      rentProductDto.endDate
+    );
   }
 }

@@ -8,14 +8,14 @@ export class Rental {
   @PrimaryKey()
   id!: string;
 
-  @Property()
-  userId!: string;
+  // @Property()
+  // userId!: string;
 
   @ManyToOne(() => User, { inversedBy: 'rentals' })
-  user!: User;
+  userId!: User;
 
-  @Property()
-  productId!: string;
+  // @Property()
+  // productId!: string;
 
   @ManyToOne(() => Product, { inversedBy: 'rentals' })
   product!: Product;

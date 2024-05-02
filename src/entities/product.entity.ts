@@ -46,8 +46,8 @@ export class Product {
   @Enum(() => RateType)
   rate!: RateType;
 
-  @Property()
-  userId!: string;
+  // @Property()
+  // userId!: string;
 
   @ManyToOne(() => User, { inversedBy: 'products' })
   user!: User;
@@ -67,6 +67,6 @@ export class Product {
   @OneToMany(() => Purchase, (purchase) => purchase.product)
   purchases = new Collection<Purchase>(this);
 
-  @Enum(() => RentStatus, { default: RentStatus.RENTED })
+  @Enum(() => RentStatus)
   status?: RentStatus;
 }

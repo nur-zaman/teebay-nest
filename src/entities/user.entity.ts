@@ -1,5 +1,5 @@
 // user.entity.ts
-import { Entity, PrimaryKey, Property, OneToMany } from '@mikro-orm/core';
+import { Entity, PrimaryKey, Property, OneToMany, Collection } from "@mikro-orm/core";
 import { Product } from './product.entity';
 import { Rental } from './rental.entity';
 import { Purchase } from './purchase.entity';
@@ -36,7 +36,7 @@ export class User {
   @OneToMany(() => Product, (product) => product.user)
   products = new Collection<Product>(this);
 
-  @OneToMany(() => Rental, (rental) => rental.user)
+  @OneToMany(() => Rental, (rental) => rental.userId)
   rentals = new Collection<Rental>(this);
 
   @OneToMany(() => Purchase, (purchase) => purchase.user)

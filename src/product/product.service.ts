@@ -1,7 +1,7 @@
 // product.service.ts
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { EntityRepository, wrap } from '@mikro-orm/postgresql';
+import { EntityManager, EntityRepository, wrap } from '@mikro-orm/postgresql';
 import { Product, RentStatus, RateType } from '../entities/product.entity';
 import { Category } from '../entities/category.entity';
 
@@ -14,6 +14,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 @Injectable()
 export class ProductService {
   constructor(
+    private readonly em: EntityManager,
     @InjectRepository(Product)
     private readonly productRepository: EntityRepository<Product>,
     @InjectRepository(Category)
@@ -35,13 +36,15 @@ export class ProductService {
         name: categoryName,
       });
       if (!category) {
-        category = this.categoryRepository.create({ name: categoryName });
-        await this.categoryRepository.persistAndFlush(category);
+        await this.em.transactional(async (em) => {
+          category = em.create(Category, { name: categoryName });
+          await em.persistAndFlush(category);
+        });
       }
       product.categories.add(category);
     }
 
-    await this.productRepository.persistAndFlush(product);
+    await this.em.persistAndFlush(product);
     return product;
   }
 
@@ -53,9 +56,10 @@ export class ProductService {
       qb.andWhere({ userId });
     }
 
-    if (status && status !== 'null') {
+
+    if (status ) {
       qb.andWhere({ status: status as RentStatus });
-    } else if (status === 'null') {
+    } else {
       qb.andWhere({ status: null });
     }
 
@@ -91,37 +95,41 @@ export class ProductService {
     if (!product) {
       throw new Error('Product not found');
     }
-    wrap(product).assign(updateProductDto, { em: this.productRepository.em });
+    // wrap(product).assign(updateProductDto, { em: this.productRepository.em });
+
+    product.categories.removeAll();
 
     for (const categoryName of updateProductDto.categories) {
       let category = await this.categoryRepository.findOne({
         name: categoryName,
       });
       if (!category) {
-        category = this.categoryRepository.create({ name: categoryName });
-        await this.categoryRepository.persistAndFlush(category);
+        await this.em.transactional(async (em) => {
+          category = em.create(Category, { name: categoryName });
+          await em.persistAndFlush(category);
+        });
       }
       product.categories.add(category);
     }
 
-    await this.productRepository.flush();
+    await this.em.flush();
     return product;
   }
 
   async remove(id: string) {
     const product = await this.findOne(id);
-    await this.productRepository.removeAndFlush(product);
+    await this.em.removeAndFlush(product);
   }
 
-  async buy(userId: string, productId: string) {
+  async buy(user: string, productId: string) {
     const product = await this.findOne(productId);
     if (product.status !== null) {
       throw new Error('Product is not available for purchase');
     }
 
-    const purchase = this.purchaseRepository.create({ userId, productId });
+    const purchase = this.purchaseRepository.create({ user, product });
     product.status = RentStatus.SOLD;
-    await this.productRepository.persistAndFlush(purchase);
+    await this.em.persistAndFlush(purchase);
     return product;
   }
 
@@ -140,8 +148,8 @@ export class ProductService {
     const overlappingRental = await this.rentalRepository.findOne({
       product,
       $or: [
+        { startDate: { $lt: endDate }, endDate: { $gt: startDate } },
         { startDate: { $lte: endDate }, endDate: { $gte: startDate } },
-        { startDate: { $gte: startDate }, endDate: { $lte: endDate } },
       ],
     });
     if (overlappingRental) {
@@ -150,12 +158,12 @@ export class ProductService {
 
     const rental = this.rentalRepository.create({
       userId,
-      productId,
+      product,
       startDate,
       endDate,
     });
     product.status = RentStatus.RENTED;
-    await this.productRepository.persistAndFlush(rental);
+    await this.em.persistAndFlush(rental);
     return product;
   }
 }
