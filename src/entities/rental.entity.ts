@@ -1,24 +1,17 @@
-// rental.entity.ts
 import { Entity, PrimaryKey, Property, ManyToOne } from '@mikro-orm/core';
 import { User } from './user.entity';
 import { Product } from './product.entity';
 
 @Entity()
 export class Rental {
-  @PrimaryKey()
+  @PrimaryKey({ type: 'uuid', defaultRaw: 'gen_random_uuid()' }) // Assuming PostgreSQL
   id!: string;
 
-  // @Property()
-  // userId!: string;
-
-  @ManyToOne(() => User, { inversedBy: 'rentals' })
+  @ManyToOne(() => User)
   userId!: User;
 
-  // @Property()
-  // productId!: string;
-
-  @ManyToOne(() => Product, { inversedBy: 'rentals' })
-  product!: Product;
+  @ManyToOne(() => Product)
+  productId!: Product;
 
   @Property()
   startDate!: Date;

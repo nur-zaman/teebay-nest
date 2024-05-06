@@ -1,4 +1,3 @@
-// user.entity.ts
 import {
   Entity,
   PrimaryKey,
@@ -12,7 +11,7 @@ import { Purchase } from './purchase.entity';
 
 @Entity()
 export class User {
-  @PrimaryKey({ type: 'uuid', defaultRaw: 'gen_random_uuid()' })
+  @PrimaryKey({ type: 'uuid', defaultRaw: 'gen_random_uuid()' }) // Assuming PostgreSQL
   id!: string;
 
   @Property()
@@ -45,6 +44,6 @@ export class User {
   @OneToMany(() => Rental, (rental) => rental.userId)
   rentals = new Collection<Rental>(this);
 
-  @OneToMany(() => Purchase, (purchase) => purchase.user)
+  @OneToMany(() => Purchase, (purchase) => purchase.userId)
   purchases = new Collection<Purchase>(this);
 }

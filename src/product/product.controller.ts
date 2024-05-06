@@ -1,12 +1,11 @@
-// product.controller.ts
 import {
   Controller,
   Get,
   Post,
-  Put,
-  Delete,
   Body,
+  Patch,
   Param,
+  Delete,
   Query,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
@@ -15,7 +14,7 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { FilterProductDto } from './dto/filter-product.dto';
 import { BuyProductDto } from './dto/buy-product.dto';
 import { RentProductDto } from './dto/rent-product.dto';
-import { ApiTags, ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
+import { ApiTags, ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger'; // Assuming you're using Swagger for API documentation
 
 @ApiTags('product')
 @Controller('product')
@@ -41,7 +40,7 @@ export class ProductController {
   }
 
   @ApiOkResponse({ description: 'Update a product by ID' })
-  @Put(':id')
+  @Patch(':id')
   async update(
     @Param('id') id: string,
     @Body() updateProductDto: UpdateProductDto,
@@ -71,7 +70,7 @@ export class ProductController {
       rentProductDto.userId,
       rentProductDto.productId,
       rentProductDto.startDate,
-      rentProductDto.endDate
+      rentProductDto.endDate,
     );
   }
 }

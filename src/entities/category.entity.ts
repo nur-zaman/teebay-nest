@@ -1,16 +1,15 @@
-// category.entity.ts
 import {
   Entity,
   PrimaryKey,
   Property,
-  ManyToMany,
   Collection,
+  ManyToMany,
 } from '@mikro-orm/core';
 import { Product } from './product.entity';
 
 @Entity()
 export class Category {
-  @PrimaryKey()
+  @PrimaryKey({ type: 'uuid', defaultRaw: 'gen_random_uuid()' }) // Assuming PostgreSQL
   id!: string;
 
   @Property({ unique: true })
@@ -21,6 +20,12 @@ export class Category {
 
   @Property({ onUpdate: () => new Date() })
   updatedAt = new Date();
+
+  // @ManyToMany({
+  //   entity: () => Product,
+  //   mappedBy: 'categories',
+  // })
+  // products = new Collection<Product>(this);
 
   @ManyToMany(() => Product, (product) => product.categories)
   products = new Collection<Product>(this);

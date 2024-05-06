@@ -1,25 +1,17 @@
-// purchase.entity.ts
 import { Entity, PrimaryKey, Property, ManyToOne } from '@mikro-orm/core';
 import { User } from './user.entity';
 import { Product } from './product.entity';
 
 @Entity()
 export class Purchase {
-  @PrimaryKey()
+  @PrimaryKey({ type: 'uuid', defaultRaw: 'gen_random_uuid()' }) // Assuming PostgreSQL
   id!: string;
 
-  // @Property()
-  // userId!: string;
+  @ManyToOne(() => User)
+  userId!: User;
 
-
-  @ManyToOne(() => User, { inversedBy: 'purchases' })
-  user!: User;
-
-  // @Property()
-  // productId!: string;
-
-  @ManyToOne(() => Product, { inversedBy: 'purchases' })
-  product!: Product;
+  @ManyToOne(() => Product)
+  productId!: Product;
 
   @Property()
   createdAt = new Date();

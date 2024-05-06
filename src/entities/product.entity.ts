@@ -1,11 +1,10 @@
-// product.entity.ts
 import {
   Entity,
   PrimaryKey,
   Property,
   ManyToOne,
-  ManyToMany,
   Enum,
+  ManyToMany,
   Collection,
   OneToMany,
 } from '@mikro-orm/core';
@@ -14,21 +13,9 @@ import { Category } from './category.entity';
 import { Rental } from './rental.entity';
 import { Purchase } from './purchase.entity';
 
-export enum RentStatus {
-  RENTED = 'RENTED',
-  SOLD = 'SOLD',
-}
-
-export enum RateType {
-  YEAR = 'YEAR',
-  WEEK = 'WEEK',
-  MONTH = 'MONTH',
-  DAY = 'DAY',
-}
-
 @Entity()
 export class Product {
-  @PrimaryKey()
+  @PrimaryKey({ type: 'uuid', defaultRaw: 'gen_random_uuid()' }) // Assuming PostgreSQL
   id!: string;
 
   @Property()
@@ -45,12 +32,8 @@ export class Product {
 
   @Enum(() => RateType)
   rate!: RateType;
-
-  // @Property()
-  // userId!: string;
-
   @ManyToOne(() => User, { inversedBy: 'products' })
-  user!: User;
+  userId!: User;
 
   @ManyToMany(() => Category, (category) => category.products, { owner: true })
   categories = new Collection<Category>(this);
@@ -61,12 +44,24 @@ export class Product {
   @Property({ onUpdate: () => new Date() })
   updatedAt = new Date();
 
-  @OneToMany(() => Rental, (rental) => rental.product)
+  @OneToMany(() => Rental, (rental) => rental.productId)
   rentals = new Collection<Rental>(this);
 
-  @OneToMany(() => Purchase, (purchase) => purchase.product)
+  @OneToMany(() => Purchase, (purchase) => purchase.productId)
   purchases = new Collection<Purchase>(this);
 
-  @Enum(() => RentStatus)
+  @Enum({ items: () => RentStatus, nullable: true })
   status?: RentStatus;
+}
+
+export enum RateType {
+  YEAR = 'YEAR',
+  WEEK = 'WEEK',
+  MONTH = 'MONTH',
+  DAY = 'DAY',
+}
+
+export enum RentStatus {
+  RENTED = 'RENTED',
+  SOLD = 'SOLD',
 }

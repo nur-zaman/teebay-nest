@@ -1,10 +1,8 @@
-// product.service.ts
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityManager, EntityRepository, wrap } from '@mikro-orm/postgresql';
 import { Product, RentStatus, RateType } from '../entities/product.entity';
 import { Category } from '../entities/category.entity';
-
 import { UpdateProductDto } from './dto/update-product.dto';
 import { FilterProductDto } from './dto/filter-product.dto';
 import { Purchase } from '../entities/purchase.entity';
@@ -56,8 +54,7 @@ export class ProductService {
       qb.andWhere({ userId });
     }
 
-
-    if (status ) {
+    if (status) {
       qb.andWhere({ status: status as RentStatus });
     } else {
       qb.andWhere({ status: null });
@@ -121,13 +118,13 @@ export class ProductService {
     await this.em.removeAndFlush(product);
   }
 
-  async buy(user: string, productId: string) {
+  async buy(userId: string, productId: string) {
     const product = await this.findOne(productId);
     if (product.status !== null) {
       throw new Error('Product is not available for purchase');
     }
 
-    const purchase = this.purchaseRepository.create({ user, product });
+    const purchase = this.purchaseRepository.create({ userId, productId });
     product.status = RentStatus.SOLD;
     await this.em.persistAndFlush(purchase);
     return product;
@@ -146,7 +143,7 @@ export class ProductService {
 
     // Check for rental overlaps (assuming rentals are exclusive)
     const overlappingRental = await this.rentalRepository.findOne({
-      product,
+      productId,
       $or: [
         { startDate: { $lt: endDate }, endDate: { $gt: startDate } },
         { startDate: { $lte: endDate }, endDate: { $gte: startDate } },
@@ -158,7 +155,7 @@ export class ProductService {
 
     const rental = this.rentalRepository.create({
       userId,
-      product,
+      productId,
       startDate,
       endDate,
     });

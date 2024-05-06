@@ -21,6 +21,8 @@
   },
   "dependencies": {
     "@mikro-orm/core": "^6.2.4",
+    "@mikro-orm/entity-generator": "^6.2.4",
+    "@mikro-orm/migrations": "^6.2.4",
     "@mikro-orm/nestjs": "^5.2.3",
     "@mikro-orm/postgresql": "^6.2.4",
     "@mikro-orm/reflection": "^6.2.4",
@@ -35,7 +37,7 @@
     "rxjs": "^7.8.1"
   },
   "devDependencies": {
-    "@mikro-orm/cli": "^6.2.3",
+    "@mikro-orm/cli": "^6.2.4",
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",
     "@nestjs/testing": "^10.0.0",
@@ -74,5 +76,12 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "mikro-orm": {
+    "useTsNode": true,
+    "configPaths": [
+      "./src/mikro-orm.config.ts",
+      "./dist/mikro-orm.config.js"
+    ]
   }
 }
