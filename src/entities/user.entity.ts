@@ -1,12 +1,18 @@
 // user.entity.ts
-import { Entity, PrimaryKey, Property, OneToMany, Collection } from "@mikro-orm/core";
+import {
+  Entity,
+  PrimaryKey,
+  Property,
+  OneToMany,
+  Collection,
+} from '@mikro-orm/core';
 import { Product } from './product.entity';
 import { Rental } from './rental.entity';
 import { Purchase } from './purchase.entity';
 
 @Entity()
 export class User {
-  @PrimaryKey()
+  @PrimaryKey({ type: 'uuid', defaultRaw: 'gen_random_uuid()' })
   id!: string;
 
   @Property()
@@ -33,7 +39,7 @@ export class User {
   @Property({ onUpdate: () => new Date() })
   updatedAt = new Date();
 
-  @OneToMany(() => Product, (product) => product.user)
+  @OneToMany(() => Product, (product) => product.userId)
   products = new Collection<Product>(this);
 
   @OneToMany(() => Rental, (rental) => rental.userId)
