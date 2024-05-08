@@ -5,7 +5,7 @@ import { ApiTags, ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 import { LoginDto } from './dto/login.dto';
 
 @ApiTags('auth')
-@Controller('auth')
+@Controller()
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
@@ -16,7 +16,7 @@ export class AuthController {
   }
 
   @ApiOkResponse({ description: 'User login' })
-  @Post('login')
+  @Post('signin')
   async login(@Body() loginDto: LoginDto) {
     return this.authService.signin(loginDto);
   }
