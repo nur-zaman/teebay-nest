@@ -31,5 +31,5 @@ export class UpdateProductDto {
 
   @ApiProperty({ required: false })
   @IsOptional()
-  categories?: string[]; // Assuming category names are provided
+  categories?: string[];
 }

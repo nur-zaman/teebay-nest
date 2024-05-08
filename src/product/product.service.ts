@@ -92,7 +92,8 @@ export class ProductService {
     if (!product) {
       throw new Error('Product not found');
     }
-    // wrap(product).assign(updateProductDto, { em: this.productRepository.em });
+
+    wrap<Product>(product).assign(updateProductDto, { em: this.em });
 
     product.categories.removeAll();
 
