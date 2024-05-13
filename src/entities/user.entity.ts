@@ -11,7 +11,7 @@ import { Purchase } from './purchase.entity';
 
 @Entity()
 export class User {
-  @PrimaryKey({ type: 'uuid', defaultRaw: 'gen_random_uuid()' }) // Assuming PostgreSQL
+  @PrimaryKey({ type: 'uuid', defaultRaw: 'gen_random_uuid()' })
   id!: string;
 
   @Property()

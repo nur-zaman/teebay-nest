@@ -4,7 +4,7 @@ import { Product } from './product.entity';
 
 @Entity()
 export class Purchase {
-  @PrimaryKey({ type: 'uuid', defaultRaw: 'gen_random_uuid()' }) // Assuming PostgreSQL
+  @PrimaryKey({ type: 'uuid', defaultRaw: 'gen_random_uuid()' })
   id!: string;
 
   @ManyToOne(() => User)

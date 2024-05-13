@@ -1,4 +1,3 @@
-// create-product.dto.ts
 import { IsNotEmpty, IsNumber, IsString, IsEnum } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { RateType } from '../../entities/product.entity';

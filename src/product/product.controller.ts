@@ -14,7 +14,7 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { FilterProductDto } from './dto/filter-product.dto';
 import { BuyProductDto } from './dto/buy-product.dto';
 import { RentProductDto } from './dto/rent-product.dto';
-import { ApiTags, ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger'; // Assuming you're using Swagger for API documentation
+import { ApiTags, ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 
 @ApiTags('product')
 @Controller('product')
