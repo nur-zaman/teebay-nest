@@ -15,6 +15,7 @@ import { FilterProductDto } from './dto/filter-product.dto';
 import { BuyProductDto } from './dto/buy-product.dto';
 import { RentProductDto } from './dto/rent-product.dto';
 import { ApiTags, ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
+import { wrap } from '@mikro-orm/core';
 
 @ApiTags('product')
 @Controller('product')
@@ -24,19 +25,25 @@ export class ProductController {
   @ApiCreatedResponse({ description: 'Create a new product' })
   @Post()
   async create(@Body() createProductDto: CreateProductDto) {
-    return this.productService.create(createProductDto);
+    return wrap(await this.productService.create(createProductDto)).serialize({
+      populate: ['*'],
+    });
   }
 
   @ApiOkResponse({ description: 'Get all products with optional filtering' })
   @Get()
   async findAll(@Query() filterProductDto: FilterProductDto) {
-    return this.productService.findAll(filterProductDto);
+    return wrap(await this.productService.findAll(filterProductDto)).serialize({
+      populate: ['*'],
+    });
   }
 
   @ApiOkResponse({ description: 'Get a product by ID' })
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    return this.productService.findOne(id);
+    return wrap(await this.productService.findOne(id)).serialize({
+      populate: ['*'],
+    });
   }
 
   @ApiOkResponse({ description: 'Update a product by ID' })
@@ -45,7 +52,11 @@ export class ProductController {
     @Param('id') id: string,
     @Body() updateProductDto: UpdateProductDto,
   ) {
-    return this.productService.update(id, updateProductDto);
+    return wrap(
+      await this.productService.update(id, updateProductDto),
+    ).serialize({
+      populate: ['*'],
+    });
   }
 
   @ApiOkResponse({ description: 'Delete a product by ID' })
@@ -57,20 +68,28 @@ export class ProductController {
   @ApiOkResponse({ description: 'Buy a product' })
   @Post('buy')
   async buyProduct(@Body() buyProductDto: BuyProductDto) {
-    return this.productService.buy(
-      buyProductDto.userId,
-      buyProductDto.productId,
-    );
+    return wrap(
+      await this.productService.buy(
+        buyProductDto.userId,
+        buyProductDto.productId,
+      ),
+    ).serialize({
+      populate: ['id', 'userId', 'title'],
+    });
   }
 
   @ApiOkResponse({ description: 'Rent a product' })
   @Post('rent')
   async rentProduct(@Body() rentProductDto: RentProductDto) {
-    return this.productService.rent(
-      rentProductDto.userId,
-      rentProductDto.productId,
-      rentProductDto.startDate,
-      rentProductDto.endDate,
-    );
+    return wrap(
+      await this.productService.rent(
+        rentProductDto.userId,
+        rentProductDto.productId,
+        rentProductDto.startDate,
+        rentProductDto.endDate,
+      ),
+    ).serialize({
+      populate: ['id', 'title'],
+    });
   }
 }

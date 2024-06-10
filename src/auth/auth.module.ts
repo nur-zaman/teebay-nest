@@ -8,6 +8,6 @@ import { User } from '../entities/user.entity';
 @Module({
   imports: [MikroOrmModule.forFeature([User])], // Register User entity
   providers: [AuthService],
-  controllers: [AuthController]
+  controllers: [AuthController],
 })
 export class AuthModule {}
