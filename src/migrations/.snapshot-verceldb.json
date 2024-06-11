@@ -252,8 +252,8 @@
           ],
           "mappedType": "enum"
         },
-        "user_id": {
-          "name": "user_id",
+        "user_id_id": {
+          "name": "user_id_id",
           "type": "uuid",
           "unsigned": false,
           "autoincrement": false,
@@ -311,10 +311,10 @@
       ],
       "checks": [],
       "foreignKeys": {
-        "product_user_id_foreign": {
-          "constraintName": "product_user_id_foreign",
+        "product_user_id_id_foreign": {
+          "constraintName": "product_user_id_id_foreign",
           "columnNames": [
-            "user_id"
+            "user_id_id"
           ],
           "localTableName": "public.product",
           "referencedColumnNames": [
@@ -347,8 +347,8 @@
           "nullable": false,
           "mappedType": "uuid"
         },
-        "product_id": {
-          "name": "product_id",
+        "product_id_id": {
+          "name": "product_id_id",
           "type": "uuid",
           "unsigned": false,
           "autoincrement": false,
@@ -425,10 +425,10 @@
           "referencedTableName": "public.user",
           "updateRule": "cascade"
         },
-        "rental_product_id_foreign": {
-          "constraintName": "rental_product_id_foreign",
+        "rental_product_id_id_foreign": {
+          "constraintName": "rental_product_id_id_foreign",
           "columnNames": [
-            "product_id"
+            "product_id_id"
           ],
           "localTableName": "public.rental",
           "referencedColumnNames": [
@@ -452,8 +452,8 @@
           "default": "gen_random_uuid()",
           "mappedType": "uuid"
         },
-        "user_id": {
-          "name": "user_id",
+        "user_id_id": {
+          "name": "user_id_id",
           "type": "uuid",
           "unsigned": false,
           "autoincrement": false,
@@ -461,8 +461,8 @@
           "nullable": false,
           "mappedType": "uuid"
         },
-        "product_id": {
-          "name": "product_id",
+        "product_id_id": {
+          "name": "product_id_id",
           "type": "uuid",
           "unsigned": false,
           "autoincrement": false,
@@ -507,10 +507,10 @@
       ],
       "checks": [],
       "foreignKeys": {
-        "purchase_user_id_foreign": {
-          "constraintName": "purchase_user_id_foreign",
+        "purchase_user_id_id_foreign": {
+          "constraintName": "purchase_user_id_id_foreign",
           "columnNames": [
-            "user_id"
+            "user_id_id"
           ],
           "localTableName": "public.purchase",
           "referencedColumnNames": [
@@ -519,10 +519,10 @@
           "referencedTableName": "public.user",
           "updateRule": "cascade"
         },
-        "purchase_product_id_foreign": {
-          "constraintName": "purchase_product_id_foreign",
+        "purchase_product_id_id_foreign": {
+          "constraintName": "purchase_product_id_id_foreign",
           "columnNames": [
-            "product_id"
+            "product_id_id"
           ],
           "localTableName": "public.purchase",
           "referencedColumnNames": [

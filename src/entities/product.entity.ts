@@ -12,10 +12,14 @@ import { User } from './user.entity';
 import { Category } from './category.entity';
 import { Rental } from './rental.entity';
 import { Purchase } from './purchase.entity';
+import { ProductRepository } from '../repositories/product.repository';
 
-@Entity()
+@Entity({
+  tableName: 'product',
+  repository: () => ProductRepository,
+})
 export class Product {
-  @PrimaryKey({ type: 'uuid', defaultRaw: 'gen_random_uuid()' }) // Assuming PostgreSQL
+  @PrimaryKey({ type: 'uuid', defaultRaw: 'gen_random_uuid()' })
   id!: string;
 
   @Property()

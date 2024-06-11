@@ -2,7 +2,12 @@ import { Entity, PrimaryKey, Property, ManyToOne } from '@mikro-orm/core';
 import { User } from './user.entity';
 import { Product } from './product.entity';
 
-@Entity()
+import { RentalRepository } from '../repositories/rental.repository';
+
+@Entity({
+  tableName: 'rental',
+  repository: () => RentalRepository,
+})
 export class Rental {
   @PrimaryKey({ type: 'uuid', defaultRaw: 'gen_random_uuid()' })
   id!: string;

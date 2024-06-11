@@ -6,10 +6,14 @@ import {
   ManyToMany,
 } from '@mikro-orm/core';
 import { Product } from './product.entity';
+import { CategoryRepository } from '../repositories/category.repository';
 
-@Entity()
+@Entity({
+  tableName: 'category',
+  repository: () => CategoryRepository,
+})
 export class Category {
-  @PrimaryKey({ type: 'uuid', defaultRaw: 'gen_random_uuid()' }) // Assuming PostgreSQL
+  @PrimaryKey({ type: 'uuid', defaultRaw: 'gen_random_uuid()' })
   id!: string;
 
   @Property({ unique: true })

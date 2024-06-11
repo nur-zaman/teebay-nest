@@ -4,7 +4,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { ApiTags, ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 import { LoginDto } from './dto/login.dto';
 import { wrap } from '@mikro-orm/core';
-
+import { UnauthorizedException } from '@nestjs/common';
 @ApiTags('auth')
 @Controller()
 export class AuthController {
@@ -35,8 +35,13 @@ export class AuthController {
   @ApiOkResponse({ description: 'User login' })
   @Post('signin')
   async login(@Body() loginDto: LoginDto) {
-    // return this.authService.signin(loginDto);
-    return wrap(await this.authService.signin(loginDto)).serialize({
+    const user = await this.authService.signin(loginDto);
+
+    if (!user) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    return wrap(user).serialize({
       populate: [],
       exclude: [
         'firstName',

@@ -1,26 +1,34 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@mikro-orm/nestjs';
-import { EntityManager, EntityRepository, wrap } from '@mikro-orm/postgresql';
-import { Product, RentStatus, RateType } from '../entities/product.entity';
+// import { InjectRepository } from '@mikro-orm/nestjs';
+import { EntityManager, wrap } from '@mikro-orm/postgresql';
+import { Product, RentStatus } from '../entities/product.entity';
 import { Category } from '../entities/category.entity';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { FilterProductDto } from './dto/filter-product.dto';
-import { Purchase } from '../entities/purchase.entity';
-import { Rental } from '../entities/rental.entity';
+// import { Purchase } from '../entities/purchase.entity';
+// import { Rental } from '../entities/rental.entity';
 import { CreateProductDto } from './dto/create-product.dto';
+import { ProductRepository } from '../repositories/product.repository';
+import { CategoryRepository } from '../repositories/category.repository';
+import { RentalRepository } from '../repositories/rental.repository';
+import { PurchaseRepository } from '../repositories/purchase.repository';
 
 @Injectable()
 export class ProductService {
   constructor(
     private readonly em: EntityManager,
-    @InjectRepository(Product)
-    private readonly productRepository: EntityRepository<Product>,
-    @InjectRepository(Category)
-    private readonly categoryRepository: EntityRepository<Category>,
-    @InjectRepository(Rental)
-    private readonly rentalRepository: EntityRepository<Rental>,
-    @InjectRepository(Purchase)
-    private readonly purchaseRepository: EntityRepository<Purchase>,
+    private readonly productRepository: ProductRepository,
+    private readonly categoryRepository: CategoryRepository,
+    private readonly rentalRepository: RentalRepository,
+    private readonly purchaseRepository: PurchaseRepository,
+    // @InjectRepository(Product)
+    // private readonly productRepository: EntityRepository<Product>,
+    // @InjectRepository(Category)
+    // private readonly categoryRepository: EntityRepository<Category>,
+    // @InjectRepository(Rental)
+    // private readonly rentalRepository: EntityRepository<Rental>,
+    // @InjectRepository(Purchase)
+    // private readonly purchaseRepository: EntityRepository<Purchase>,
   ) {}
 
   async create(createProductDto: CreateProductDto) {
@@ -142,7 +150,6 @@ export class ProductService {
       throw new Error('Product is not available for rent');
     }
 
-    // Check for rental overlaps (assuming rentals are exclusive)
     const overlappingRental = await this.rentalRepository.findOne({
       productId,
       $or: [

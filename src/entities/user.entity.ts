@@ -9,7 +9,12 @@ import { Product } from './product.entity';
 import { Rental } from './rental.entity';
 import { Purchase } from './purchase.entity';
 
-@Entity()
+import { UserRepository } from '../repositories/user.repository';
+
+@Entity({
+  tableName: 'user',
+  repository: () => UserRepository,
+})
 export class User {
   @PrimaryKey({ type: 'uuid', defaultRaw: 'gen_random_uuid()' })
   id!: string;

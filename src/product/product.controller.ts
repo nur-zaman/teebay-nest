@@ -33,9 +33,7 @@ export class ProductController {
   @ApiOkResponse({ description: 'Get all products with optional filtering' })
   @Get()
   async findAll(@Query() filterProductDto: FilterProductDto) {
-    return wrap(await this.productService.findAll(filterProductDto)).serialize({
-      populate: ['*'],
-    });
+    return await this.productService.findAll(filterProductDto);
   }
 
   @ApiOkResponse({ description: 'Get a product by ID' })
@@ -52,11 +50,7 @@ export class ProductController {
     @Param('id') id: string,
     @Body() updateProductDto: UpdateProductDto,
   ) {
-    return wrap(
-      await this.productService.update(id, updateProductDto),
-    ).serialize({
-      populate: ['*'],
-    });
+    return await this.productService.update(id, updateProductDto);
   }
 
   @ApiOkResponse({ description: 'Delete a product by ID' })
