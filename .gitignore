@@ -56,3 +56,4 @@ pids
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 mikro-orm.config.ts
+src/mikro-orm.config.ts

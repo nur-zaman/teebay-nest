@@ -1,13 +1,13 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import request from 'supertest';
-import { AppModule } from '../../../src/app.module';
-import { CreateProductDto } from '../../../src/product/dto/create-product.dto';
-import { UpdateProductDto } from '../../../src/product/dto/update-product.dto';
-import { BuyProductDto } from '../../../src/product/dto/buy-product.dto';
-import { RentProductDto } from '../../../src/product/dto/rent-product.dto';
-import { RateType } from '../../../src/entities/product.entity';
-import { CreateUserDto } from '../../../src/auth/dto/create-user.dto';
+import { AppModule } from '../../src/app.module';
+import { CreateProductDto } from '../../src/product/dto/create-product.dto';
+import { UpdateProductDto } from '../../src/product/dto/update-product.dto';
+import { BuyProductDto } from '../../src/product/dto/buy-product.dto';
+import { RentProductDto } from '../../src/product/dto/rent-product.dto';
+import { RateType } from '../../src/entities/product.entity';
+import { CreateUserDto } from '../../src/auth/dto/create-user.dto';
 
 describe('ProductController (e2e)', () => {
   let app: INestApplication;
